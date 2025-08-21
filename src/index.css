@@ -1,42 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Agrevon Marketplace Design System - Eco-friendly Agriculture Theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Core Brand Colors */
+    --primary: 140 43% 34%;        /* Deep eco green #2E7D32 */
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 140 43% 45%;  /* Lighter green for hover */
+    --primary-dark: 140 50% 25%;   /* Darker green for depth */
+    
+    --secondary: 45 100% 51%;      /* Harvest yellow #FFC107 */
+    --secondary-foreground: 45 95% 15%;
+    --secondary-light: 45 100% 65%;
+    --secondary-dark: 45 100% 40%;
+    
+    /* Earth Tone Palette */
+    --earth-brown: 25 20% 35%;     /* Rich soil brown */
+    --earth-tan: 35 25% 75%;       /* Light sandy tan */
+    --earth-sage: 120 15% 60%;     /* Sage green */
+    --earth-cream: 45 30% 95%;     /* Warm cream */
+    
+    /* Background & Surface */
+    --background: 120 20% 98%;      /* Soft off-white with green hint */
+    --foreground: 140 15% 15%;      /* Dark green-grey text */
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 140 15% 15%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --popover-foreground: 140 15% 15%;
+    
+    /* UI Elements */
+    --muted: 120 15% 96%;          /* Light green-grey */
+    --muted-foreground: 140 10% 45%;
+    
+    --accent: 140 20% 92%;         /* Subtle green accent */
+    --accent-foreground: 140 15% 15%;
+    
+    --border: 120 15% 88%;         /* Soft green-grey border */
+    --input: 120 15% 95%;          /* Light input background */
+    --ring: 140 43% 34%;           /* Focus ring matches primary */
+    
+    /* Status Colors */
+    --success: 140 65% 42%;        /* Vibrant green for success */
+    --success-foreground: 0 0% 98%;
+    
+    --warning: 45 95% 50%;         /* Harvest yellow for warnings */
+    --warning-foreground: 45 95% 15%;
+    
+    --destructive: 0 75% 55%;      /* Gentle red for errors */
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Design System Variables */
+    --radius: 0.75rem;             /* Rounded corners */
+    --shadow-soft: 0 2px 8px hsl(140 20% 0% / 0.08);
+    --shadow-medium: 0 4px 16px hsl(140 20% 0% / 0.12);
+    --shadow-strong: 0 8px 32px hsl(140 20% 0% / 0.16);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 50%, hsl(var(--secondary)) 100%);
+    --gradient-earth: linear-gradient(180deg, hsl(var(--earth-cream)), hsl(var(--earth-tan)));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(var(--accent)) 100%);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +134,93 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+}
+
+@layer components {
+  /* Hero Section Styles */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .card-hover {
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Button Variants */
+  .btn-hero {
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    transition: var(--transition-smooth);
+  }
+  
+  .btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .btn-secondary {
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    transition: var(--transition-smooth);
+  }
+  
+  .btn-secondary:hover {
+    background: hsl(var(--secondary-dark));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  /* Crop Card Styles */
+  .crop-card {
+    background: var(--gradient-card);
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    transition: var(--transition-smooth);
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .crop-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-strong);
+    border-color: hsl(var(--primary) / 0.3);
+  }
+  
+  /* Animation Classes */
+  .fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
