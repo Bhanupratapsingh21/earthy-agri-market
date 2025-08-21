@@ -24,30 +24,34 @@ export function Navigation({ className }: NavigationProps) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <a href="/marketplace" className="text-foreground hover:text-primary transition-colors">
               Marketplace
             </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              How it Works
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <a href="/about" className="text-foreground hover:text-primary transition-colors">
               About
             </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <a href="/support" className="text-foreground hover:text-primary transition-colors">
               Support
+            </a>
+            <a href="/contact" className="text-foreground hover:text-primary transition-colors">
+              Contact
             </a>
           </div>
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-              <LogIn className="h-4 w-4 mr-2" />
-              Login
-            </Button>
-            <Button size="sm" className="btn-hero">
-              <User className="h-4 w-4 mr-2" />
-              Sign Up
-            </Button>
+            <a href="/login">
+              <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                <LogIn className="h-4 w-4 mr-2" />
+                Login
+              </Button>
+            </a>
+            <a href="/signup">
+              <Button size="sm" className="btn-hero">
+                <User className="h-4 w-4 mr-2" />
+                Sign Up
+              </Button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -67,27 +71,31 @@ export function Navigation({ className }: NavigationProps) {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-3">
-              <a href="#" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              <a href="/marketplace" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Marketplace
               </a>
-              <a href="#" className="text-foreground hover:text-primary transition-colors px-2 py-1">
-                How it Works
-              </a>
-              <a href="#" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              <a href="/about" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 About
               </a>
-              <a href="#" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              <a href="/support" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Support
               </a>
+              <a href="/contact" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+                Contact
+              </a>
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-                <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
-                </Button>
-                <Button size="sm" className="btn-hero">
-                  <User className="h-4 w-4 mr-2" />
-                  Sign Up
-                </Button>
+                <a href="/login">
+                  <Button variant="outline" size="sm" className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                </a>
+                <a href="/signup">
+                  <Button size="sm" className="w-full btn-hero">
+                    <User className="h-4 w-4 mr-2" />
+                    Sign Up
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
