@@ -15,6 +15,20 @@ import Services from "./pages/Services";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import NotFound from "./pages/NotFound";
+// Service pages
+import CommodityTrade from "./pages/services/CommodityTrade";
+import KrishiSahayakAI from "./pages/services/KrishiSahayakAI";
+import Nuvetra from "./pages/services/Nuvetra";
+import Fintrin from "./pages/services/Fintrin";
+import TestCertification from "./pages/services/TestCertification";
+import StorageColdStorage from "./pages/services/StorageColdStorage";
+import TransportCalculator from "./pages/services/TransportCalculator";
+import SeedsFertilizerStore from "./pages/services/SeedsFertilizerStore";
+import ToolsMachinery from "./pages/services/ToolsMachinery";
+import MandiBhav from "./pages/services/MandiBhav";
+import AgriNewsSchemes from "./pages/services/AgriNewsSchemes";
+import KCCAgricultureLoans from "./pages/services/KCCAgricultureLoans";
+import AgriCareSupport from "./pages/services/AgriCareSupport";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +48,19 @@ const App = () => (
           <Route path="/support" element={<Support />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/commodity-trade" element={<CommodityTrade />} />
+          <Route path="/services/krishi-sahayak-ai" element={<KrishiSahayakAI />} />
+          <Route path="/services/nuvetra" element={<Nuvetra />} />
+          <Route path="/services/fintrin" element={<Fintrin />} />
+          <Route path="/services/test-certification" element={<TestCertification />} />
+          <Route path="/services/storage-cold-storage" element={<StorageColdStorage />} />
+          <Route path="/services/transport-calculator" element={<TransportCalculator />} />
+          <Route path="/services/seeds-fertilizer-store" element={<SeedsFertilizerStore />} />
+          <Route path="/services/tools-machinery" element={<ToolsMachinery />} />
+          <Route path="/services/mandi-bhav" element={<MandiBhav />} />
+          <Route path="/services/agri-news-schemes" element={<AgriNewsSchemes />} />
+          <Route path="/services/kcc-agriculture-loans" element={<KCCAgricultureLoans />} />
+          <Route path="/services/agricare-support" element={<AgriCareSupport />} />
           <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
           <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

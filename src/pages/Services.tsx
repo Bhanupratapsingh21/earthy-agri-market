@@ -106,25 +106,29 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {services.map((service, index) => {
             const IconComponent = service.icon;
+            const serviceSlug = service.title.toLowerCase()
+              .replace(/&/g, '')
+              .replace(/\s+/g, '-')
+              .replace(/[()]/g, '');
+            
             return (
-              <Card 
-                key={index} 
-                className="group hover:shadow-lg transition-all duration-300 hover:scale-105 border-border bg-card"
-              >
-                <CardHeader className="text-center pb-4">
-                  <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit group-hover:bg-primary/20 transition-colors">
-                    <IconComponent className="h-8 w-8 text-primary" />
-                  </div>
-                  <CardTitle className="text-lg font-semibold text-card-foreground">
-                    {service.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <CardDescription className="text-center text-muted-foreground leading-relaxed">
-                    {service.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+              <a href={`/services/${serviceSlug}`} key={index}>
+                <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 border-border bg-card cursor-pointer">
+                  <CardHeader className="text-center pb-4">
+                    <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit group-hover:bg-primary/20 transition-colors">
+                      <IconComponent className="h-8 w-8 text-primary" />
+                    </div>
+                    <CardTitle className="text-lg font-semibold text-card-foreground">
+                      {service.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <CardDescription className="text-center text-muted-foreground leading-relaxed">
+                      {service.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </a>
             );
           })}
         </div>
