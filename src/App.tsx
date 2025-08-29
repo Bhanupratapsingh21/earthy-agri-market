@@ -11,6 +11,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import About from "./pages/About";
 import Support from "./pages/Support";
 import Contact from "./pages/Contact";
+import Services from "./pages/Services";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import NotFound from "./pages/NotFound";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/support" element={<Support />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
           <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

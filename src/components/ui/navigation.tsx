@@ -30,6 +30,9 @@ export function Navigation({ className }: NavigationProps) {
             <a href="/about" className="text-foreground hover:text-primary transition-colors">
               About
             </a>
+            <a href="/services" className="text-foreground hover:text-primary transition-colors">
+              Services
+            </a>
             <a href="/support" className="text-foreground hover:text-primary transition-colors">
               Support
             </a>
@@ -76,6 +79,9 @@ export function Navigation({ className }: NavigationProps) {
               </a>
               <a href="/about" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 About
+              </a>
+              <a href="/services" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+                Services
               </a>
               <a href="/support" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Support
