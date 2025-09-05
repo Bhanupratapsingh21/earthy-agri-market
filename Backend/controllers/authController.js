@@ -7,10 +7,10 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/
 // 1. User register
 export const register = async (req, res) => {
     try {
-        const { name, email, phone, password, gender, role } = req.body;
+        const { firstName, lastName, email, phone, password, gender, role } = req.body;
 
         const errors = [];
-        if (!name) errors.push("name");
+        if (!firstName) errors.push("firstname");
         if (!email) errors.push("email");
         if (!phone) errors.push("phone");
         if (!password) errors.push("password");
@@ -40,7 +40,8 @@ export const register = async (req, res) => {
         const profileImage = req.file ? req.file.path : null;
 
         const user = await User.create({
-            name,
+            firstName,
+            lastName,
             email,
             phone,
             password: hashedPassword,

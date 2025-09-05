@@ -6,6 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/UserSlice";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,14 +19,38 @@ export default function Signup() {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
-    role: "buyer"
+    role: "buyer",
+    gender: "male",
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Static form - no backend functionality
+
+    if (formData.password != formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${API_BASE_URL}/auth/register`, formData);
+      const { user, accessToken, refreshToken } = res.data.data;
+      dispatch(setUser({ user, accessToken }));
+      localStorage.setItem('refreshToken', refreshToken);
+      console.log('Signup successful!');
+      if (user.role === "farmer") {
+        navigate("/farmer-dashboard");
+      } else if (user.role === "buyer") {
+        navigate("/buyer-dashboard");
+      }
+    }
+    catch (err) {
+      console.error('Signup failed:', err.response?.data || err.message);
+    }
     console.log("Signup attempt:", formData);
   };
 
@@ -35,9 +65,10 @@ export default function Signup() {
           <CardTitle className="text-2xl">Create Account</CardTitle>
           <CardDescription>Join the agricultural marketplace</CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
@@ -60,7 +91,8 @@ export default function Signup() {
                 />
               </div>
             </div>
-            
+
+            {/* Email Field */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -72,7 +104,22 @@ export default function Signup() {
                 required
               />
             </div>
-            
+
+            {/* Phone Field */}
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="1234567890"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                required
+                className="border rounded-lg p-3 hover:border-primary focus:border-primary"
+              />
+            </div>
+
+            {/* Role Selection */}
             <div className="space-y-3">
               <Label>I am a:</Label>
               <RadioGroup
@@ -80,14 +127,14 @@ export default function Signup() {
                 onValueChange={(value) => setFormData({ ...formData, role: value })}
                 className="grid grid-cols-2 gap-4"
               >
-                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent transition-colors">
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent transition-colors cursor-pointer">
                   <RadioGroupItem value="farmer" id="farmer" />
                   <Label htmlFor="farmer" className="flex items-center cursor-pointer">
                     <UserCheck className="h-4 w-4 mr-2 text-primary" />
                     Farmer
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent transition-colors">
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent transition-colors cursor-pointer">
                   <RadioGroupItem value="buyer" id="buyer" />
                   <Label htmlFor="buyer" className="flex items-center cursor-pointer">
                     <User className="h-4 w-4 mr-2 text-primary" />
@@ -96,7 +143,31 @@ export default function Signup() {
                 </div>
               </RadioGroup>
             </div>
-            
+
+            {/* Gender Selection */}
+            <div className="space-y-3">
+              <Label>Gender:</Label>
+              <RadioGroup
+                value={formData.gender}
+                onValueChange={(value) => setFormData({ ...formData, gender: value })}
+                className="grid grid-cols-3 gap-4"
+              >
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent transition-colors cursor-pointer">
+                  <RadioGroupItem value="male" id="male" />
+                  <Label htmlFor="male" className="flex items-center cursor-pointer">Male</Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent transition-colors cursor-pointer">
+                  <RadioGroupItem value="female" id="female" />
+                  <Label htmlFor="female" className="flex items-center cursor-pointer">Female</Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent transition-colors cursor-pointer">
+                  <RadioGroupItem value="other" id="other" />
+                  <Label htmlFor="other" className="flex items-center cursor-pointer">Other</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {/* Password Fields */}
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
@@ -115,15 +186,11 @@ export default function Signup() {
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <Eye className="h-4 w-4 text-muted-foreground" />
-                  )}
+                  {showPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
                 </Button>
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input
@@ -135,12 +202,12 @@ export default function Signup() {
                 required
               />
             </div>
-            
+
             <Button type="submit" className="w-full btn-hero">
               Create Account
             </Button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
               Already have an account?{" "}

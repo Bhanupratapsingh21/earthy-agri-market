@@ -1,22 +1,54 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Leaf, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/store/UserSlice";
+import { RootState } from "@/store";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      const userRole = useSelector((state: RootState) => state.user.user?.role);
+      if (userRole === "farmer") navigate("/farmer-dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Static form - no backend functionality
-    console.log("Login attempt:", formData);
+
+    try {
+      const res = await axios.post(`${API_BASE_URL}/auth/login`, formData);
+
+      const { user, accessToken, refreshToken } = res.data.data;
+      dispatch(setUser({ user, accessToken }));
+
+      localStorage.setItem("refreshToken", refreshToken);
+
+      if (user.role === "farmer") {
+        navigate("/farmer-dashboard");
+      } else if (user.role === "buyer") {
+        navigate("/buyer-dashboard");
+      }
+
+    } catch (err: any) {
+      console.error("Login failed:", err.response?.data || err.message);
+      alert(err.response?.data?.message || "Login failed!");
+    }
   };
 
   return (
@@ -30,7 +62,7 @@ export default function Login() {
           <CardTitle className="text-2xl">Welcome Back</CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
@@ -44,7 +76,7 @@ export default function Login() {
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
@@ -71,22 +103,22 @@ export default function Login() {
                 </Button>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
-              <Link 
-                to="/forgot-password" 
+              <Link
+                to="/forgot-password"
                 className="text-sm text-primary hover:underline"
               >
                 Forgot password?
               </Link>
             </div>
-            
+
             <Button type="submit" className="w-full btn-hero">
               <LogIn className="h-4 w-4 mr-2" />
               Sign In
             </Button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
               Don't have an account?{" "}
