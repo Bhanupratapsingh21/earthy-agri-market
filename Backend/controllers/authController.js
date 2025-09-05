@@ -37,7 +37,7 @@ export const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const profileImage = req.file ? req.file.path : null;
+
 
         const user = await User.create({
             firstName,
@@ -47,7 +47,6 @@ export const register = async (req, res) => {
             password: hashedPassword,
             gender,
             role,
-            profileImage,
             refreshTokens: [],
         });
 
@@ -159,7 +158,7 @@ export const refreshTokenHandler = async (req, res) => {
         const userObj = user.toObject();
         delete userObj.password;
         delete userObj.refreshTokens;
-
+        console.log("token refreshed")
         return resSuccess(
             res,
             { user: userObj, accessToken: newAccessToken, refreshToken: newRefreshToken },
