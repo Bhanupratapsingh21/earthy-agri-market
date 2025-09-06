@@ -7,8 +7,8 @@ const ACCESS_SECRET = process.env.JWT_SECRET;
 const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 // Use environment variables with fallbacks
-const ACCESS_EXPIRES_IN = process.env.ACCESS_EXPIRES_IN || "1d";
-const REFRESH_EXPIRES_IN = process.env.REFRESH_EXPIRES_IN || "7d";
+const ACCESS_EXPIRES_IN = "1d";
+const REFRESH_EXPIRES_IN = "7d";
 
 console.log('ACCESS_EXPIRES_IN:', ACCESS_EXPIRES_IN);
 console.log('REFRESH_EXPIRES_IN:', REFRESH_EXPIRES_IN);

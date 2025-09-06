@@ -3,8 +3,12 @@ import { Navigation } from "@/components/ui/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 export default function FarmerDashboard() {
+
+  const navigate = useNavigate();
+
   // Mock data for dashboard
   const stats = [
     { title: "Active Listings", value: "12", icon: Package, change: "+2", color: "text-primary" },
@@ -73,7 +77,7 @@ export default function FarmerDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
@@ -81,7 +85,8 @@ export default function FarmerDashboard() {
             <h1 className="text-3xl font-bold text-foreground">Farmer Dashboard</h1>
             <p className="text-muted-foreground mt-1">Welcome back, John! Here's your farm overview.</p>
           </div>
-          <Button className="btn-hero mt-4 sm:mt-0">
+          <Button className="btn-hero mt-4 sm:mt-0"
+            onClick={() => navigate("/add/crops")}>
             <Plus className="h-4 w-4 mr-2" />
             Create New Listing
           </Button>
@@ -134,7 +139,7 @@ export default function FarmerDashboard() {
                         <div className="flex items-center space-x-4 mt-1">
                           <span className="text-sm text-muted-foreground">{listing.quantity}</span>
                           <span className="text-sm font-medium text-primary">{listing.price}</span>
-                          <Badge 
+                          <Badge
                             variant={listing.status === "Active" ? "default" : "destructive"}
                             className="text-xs"
                           >
