@@ -26,7 +26,7 @@ router.post('/',
 
             const crop = new Crop(cropData);
             await crop.save();
-            await crop.populate('farmerId', 'name email phone location');
+            await crop.populate('farmerId', 'firstName lastName email phone location');
 
             res.status(201).json({
                 success: true,
@@ -54,7 +54,7 @@ router.put('/:id',
         try {
             const crop = await Crop.findOne({
                 _id: req.params.id,
-                farmer: req.user._id
+                farmerId: req.user._id
             });
 
             if (!crop) {
@@ -120,7 +120,7 @@ router.delete('/:id', authMiddleware(), async (req, res) => {
     try {
         const crop = await Crop.findOne({
             _id: req.params.id,
-            farmer: req.user._id
+            farmerId: req.user._id
         });
 
         if (!crop) {
@@ -204,7 +204,7 @@ router.get('/:id', async (req, res) => {
 
         // Get crop with farmer details
         const crop = await Crop.findById(cropId)
-            .populate('farmer', 'name email phone location rating totalSales joinedDate')
+            .populate('farmerId', 'firstName lastName email phone role createdAt')
             .exec();
 
         if (!crop) {
@@ -216,11 +216,11 @@ router.get('/:id', async (req, res) => {
 
         // Get related crops from same farmer
         const relatedCrops = await Crop.find({
-            farmer: crop.farmer._id,
+            farmerId: crop.farmerId._id,
             _id: { $ne: cropId },
             status: 'active'
         })
-            .select('name category price images')
+            .select('cropName category price images')
             .limit(4);
 
         // Get bid statistics if it's an auction
@@ -230,7 +230,9 @@ router.get('/:id', async (req, res) => {
             bidStats = {
                 totalBids: bids.length,
                 highestBid: Math.max(...bids.map(bid => bid.amount), 0),
-                averageBid: bids.length > 0 ? bids.reduce((sum, bid) => sum + bid.amount, 0) / bids.length : 0,
+                averageBid: bids.length > 0
+                    ? bids.reduce((sum, bid) => sum + bid.amount, 0) / bids.length
+                    : 0,
                 uniqueBidders: [...new Set(bids.map(bid => bid.bidder.toString()))].length
             };
         }
@@ -238,7 +240,7 @@ router.get('/:id', async (req, res) => {
         // Get recent bid activity (last 5 bids for auctions)
         const recentBids = crop.priceType === 'auction'
             ? await Bid.find({ crop: cropId, status: { $ne: 'withdrawn' } })
-                .populate('bidder', 'name')
+                .populate('bidder', 'firstName lastName email')
                 .sort({ createdAt: -1 })
                 .limit(5)
                 .select('amount createdAt bidder')
@@ -254,9 +256,11 @@ router.get('/:id', async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Error fetching crop details:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
 router.get('/:id/bids', authMiddleware(), async (req, res) => {
     try {
         const { page = 1, limit = 10, status } = req.query;
@@ -310,7 +314,7 @@ router.get('/farmer/:farmerId', async (req, res) => {
         if (status) query.status = status;
 
         const crops = await Crop.find(query)
-            .populate('farmer', 'name location rating')
+            .populate('farmerId', 'firstName lastName email')
             .sort({ createdAt: -1 })
             .limit(limit * 1)
             .skip((page - 1) * limit);
@@ -319,7 +323,7 @@ router.get('/farmer/:farmerId', async (req, res) => {
 
         // Get farmer profile
         const farmer = await User.findById(farmerId)
-            .select('name email location rating totalSales joinedDate bio');
+            .select('firstName lastName email location rating totalSales joinedDate bio');
 
         res.json({
             success: true,

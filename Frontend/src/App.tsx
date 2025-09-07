@@ -31,7 +31,8 @@ import AgriNewsSchemes from "./pages/services/AgriNewsSchemes";
 import KCCAgricultureLoans from "./pages/services/KCCAgricultureLoans";
 import AgriCareSupport from "./pages/services/AgriCareSupport";
 //Crops
-import AddCrop from "./pages/AddCRops";
+import AddCrop from "./pages/AddCrops";
+import ContactFarmer from "./pages/ContactFarmer";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => (
           <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
           <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
           <Route path="/add/crops" element={<AddCrop />} />
+          <Route path="/contact-farmer/:id" element={<ContactFarmer />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
