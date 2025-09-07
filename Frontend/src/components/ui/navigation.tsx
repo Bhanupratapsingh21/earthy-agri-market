@@ -1,7 +1,13 @@
 import { useState } from "react";
-import { Menu, X, Leaf, User, LogIn, ShoppingCart } from "lucide-react";
+import { Menu, X, Leaf, User, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store"; // adjust path based on your store setup
+import { logout } from "@/store/UserSlice";
+import { User as UserIcon } from "lucide-react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface NavigationProps {
   className?: string;
@@ -9,8 +15,33 @@ interface NavigationProps {
 
 export function Navigation({ className }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.user);
+  const refreshToken = localStorage.getItem('refreshToken');
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}Auth/logout`, {
+        refreshToken,
+      });
+      localStorage.removeItem('refreshToken');
+      navigate('/login');
+    }
+    catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Logout failed:', {
+          status: error.response?.status,
+          data: error.response?.data,
+          message: error.message,
+        });
+      } else {
+        console.error('Unexpected error during logout:', error);
+      }
+    }
+    dispatch(logout());
+  };
 
   return (
     <nav className={cn("bg-white shadow-soft border-b border-border", className)}>
@@ -41,20 +72,43 @@ export function Navigation({ className }: NavigationProps) {
             </a>
           </div>
 
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Auth Section */}
           <div className="hidden md:flex items-center space-x-4">
-            <a href="/login">
-              <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <LogIn className="h-4 w-4 mr-2" />
-                Login
-              </Button>
-            </a>
-            <a href="/signup">
-              <Button size="sm" className="btn-hero">
-                <User className="h-4 w-4 mr-2" />
-                Sign Up
-              </Button>
-            </a>
+            {isAuthenticated ? (
+              <>
+                <span className="flex items-center gap-2 font-medium text-foreground">
+                  <UserIcon className="w-5 h-5 text-foreground" />
+                  {user?.firstName}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <a href="/login">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                  >
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                </a>
+                <a href="/signup">
+                  <Button size="sm" className="btn-hero">
+                    <User className="h-4 w-4 mr-2" />
+                    Sign Up
+                  </Button>
+                </a>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -89,19 +143,42 @@ export function Navigation({ className }: NavigationProps) {
               <a href="/contact" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Contact
               </a>
+
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-                <a href="/login">
-                  <Button variant="outline" size="sm" className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Login
-                  </Button>
-                </a>
-                <a href="/signup">
-                  <Button size="sm" className="w-full btn-hero">
-                    <User className="h-4 w-4 mr-2" />
-                    Sign Up
-                  </Button>
-                </a>
+                {isAuthenticated ? (
+                  <>
+                    <span className="px-2 font-medium text-foreground">
+                      👋 {user?.firstName || "User"}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <a href="/login">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                      >
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Login
+                      </Button>
+                    </a>
+                    <a href="/signup">
+                      <Button size="sm" className="w-full btn-hero">
+                        <User className="h-4 w-4 mr-2" />
+                        Sign Up
+                      </Button>
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </div>

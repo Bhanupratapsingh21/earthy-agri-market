@@ -15,6 +15,7 @@ import Services from "./pages/Services";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import NotFound from "./pages/NotFound";
+import { Session } from "./store/store";
 // Service pages
 import CommodityTrade from "./pages/services/CommodityTrade";
 import KrishiSahayakAI from "./pages/services/KrishiSahayakAI";
@@ -29,6 +30,9 @@ import MandiBhav from "./pages/services/MandiBhav";
 import AgriNewsSchemes from "./pages/services/AgriNewsSchemes";
 import KCCAgricultureLoans from "./pages/services/KCCAgricultureLoans";
 import AgriCareSupport from "./pages/services/AgriCareSupport";
+//Crops
+import AddCrop from "./pages/AddCrops";
+import ContactFarmer from "./pages/ContactFarmer";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +42,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Session />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/marketplace" element={<Marketplace />} />
@@ -63,6 +68,8 @@ const App = () => (
           <Route path="/services/agricare-support" element={<AgriCareSupport />} />
           <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
           <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
+          <Route path="/add/crops" element={<AddCrop />} />
+          <Route path="/contact-farmer/:id" element={<ContactFarmer />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

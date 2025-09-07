@@ -20,13 +20,14 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const userRole = useSelector((state: RootState) => state.user.user?.role);
 
   useEffect(() => {
     if (isAuthenticated) {
-      const userRole = useSelector((state: RootState) => state.user.user?.role);
       if (userRole === "farmer") navigate("/farmer-dashboard");
+      else if (userRole === "buyer") navigate("/buyer-dashboard");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, userRole, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
