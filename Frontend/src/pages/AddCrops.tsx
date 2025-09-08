@@ -1,4 +1,3 @@
-// src/pages/AddCrop.jsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,19 +12,16 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Navigation } from "@/components/ui/navigation";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import { ArrowLeft } from "lucide-react";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function AddCrop() {
     const navigate = useNavigate();
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const token = useSelector((state: RootState) => state.user.accessToken);
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState<File[]>([]);
 
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/login');
-        }
-    }, [isAuthenticated]);
     const [formData, setFormData] = useState({
         cropName: "",
         category: "",
@@ -40,55 +36,48 @@ export default function AddCrop() {
         specifications: { organic: false, pesticidesUsed: false, fertilizersUsed: false, certifications: [] }
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    useEffect(() => {
+        if (!isAuthenticated) navigate("/login");
+    }, [isAuthenticated]);
 
-        // Handle nested fields like quantity, price, location
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
         if (name.includes(".")) {
             const [section, field] = name.split(".");
-            setFormData((prev) => ({
+            setFormData(prev => ({
                 ...prev,
-                [section]: {
-                    ...prev[section],
-                    [field]: value,
-                },
+                [section]: { ...prev[section], [field]: value }
             }));
         } else {
-            setFormData((prev) => ({ ...prev, [name]: value }));
+            setFormData(prev => ({ ...prev, [name]: value }));
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Array-based validation
         const requiredFields = [
-            { field: 'cropName', value: formData.cropName },
-            { field: 'category', value: formData.category },
-            { field: 'description', value: formData.description },
-            { field: 'quantity.amount', value: formData.quantity.amount },
-            { field: 'quantity.unit', value: formData.quantity.unit },
-            { field: 'price.basePrice', value: formData.price.basePrice },
-            { field: 'location.state', value: formData.location.state },
-            { field: 'location.district', value: formData.location.district },
-            { field: 'location.address', value: formData.location.address },
+            { field: "cropName", value: formData.cropName },
+            { field: "category", value: formData.category },
+            { field: "description", value: formData.description },
+            { field: "quantity.amount", value: formData.quantity.amount },
+            { field: "quantity.unit", value: formData.quantity.unit },
+            { field: "price.basePrice", value: formData.price.basePrice },
+            { field: "location.state", value: formData.location.state },
+            { field: "location.district", value: formData.location.district },
+            { field: "location.address", value: formData.location.address }
         ];
 
-        const errors = requiredFields
-            .filter(item => !item.value)
-            .map(item => item.field);
-
+        const errors = requiredFields.filter(f => !f.value).map(f => f.field);
         if (errors.length > 0) {
-            alert(`Please fill all required fields: ${errors.join(', ')}`);
+            alert(`Please fill all required fields: ${errors.join(", ")}`);
             return;
         }
 
         try {
-
             const data = new FormData();
             Object.keys(formData).forEach(key => {
-                if (typeof formData[key] === 'object' && !Array.isArray(formData[key])) {
-
+                if (typeof formData[key] === "object" && !Array.isArray(formData[key])) {
                     Object.keys(formData[key]).forEach(nestedKey => {
                         data.append(`${key}.${nestedKey}`, formData[key][nestedKey]);
                     });
@@ -96,46 +85,45 @@ export default function AddCrop() {
                     data.append(key, formData[key]);
                 }
             });
-
-            images.forEach((image) => {
-                data.append('images', image);
-            });
+            images.forEach(image => data.append("images", image));
 
             await axios.post(`${API_BASE_URL}/crops`, data, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                },
+                headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
             });
 
             alert("Crop added successfully!");
             navigate("/farmer-dashboard");
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             alert("Error adding crop: " + (error.response?.data?.message || error.message));
         }
     };
 
-
-
     return (
         <>
             <Navigation />
-            <div className="min-h-screen bg-gradient-hero flex items-center justify-center px-4">
-                <Card className="w-full max-w-3xl shadow-lg">
+            <div className="min-h-screen bg-gradient-to-br from-green-50 to-amber-50 flex flex-col items-center px-4 py-8">
+                <Button
+                    variant="outline"
+                    onClick={() => navigate("/farmer-dashboard")}
+                    className="flex items-center gap-2 mb-6 self-start"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back to Dashboard
+                </Button>
+
+                <Card className="w-full max-w-3xl shadow-lg rounded-2xl">
                     <CardHeader>
                         <CardTitle className="text-2xl font-bold">Add New Crop</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-6">
 
-                            {/* Crop Name */}
                             <div>
                                 <Label>Crop Name</Label>
                                 <Input name="cropName" value={formData.cropName} onChange={handleChange} required />
                             </div>
 
-                            {/* Category */}
                             <div>
                                 <Label>Category</Label>
                                 <Select name="category" onValueChange={(val) => setFormData({ ...formData, category: val })}>
@@ -153,13 +141,11 @@ export default function AddCrop() {
                                 </Select>
                             </div>
 
-                            {/* Description */}
                             <div>
                                 <Label>Description</Label>
                                 <Textarea name="description" value={formData.description} onChange={handleChange} required />
                             </div>
 
-                            {/* Quantity */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label>Quantity</Label>
@@ -182,7 +168,6 @@ export default function AddCrop() {
                                 </div>
                             </div>
 
-                            {/* Price */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label>Base Price</Label>
@@ -196,7 +181,6 @@ export default function AddCrop() {
                                 )}
                             </div>
 
-                            {/* Location */}
                             <div className="grid grid-cols-3 gap-4">
                                 <div>
                                     <Label>State</Label>
@@ -212,19 +196,11 @@ export default function AddCrop() {
                                 </div>
                             </div>
 
-                            {/* Images */}
                             <div>
                                 <Label>Upload Images</Label>
-                                <Input
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    onChange={(e) => setImages(Array.from(e.target.files))}
-                                />
+                                <Input type="file" multiple accept="image/*" onChange={(e) => setImages(Array.from(e.target.files ?? []))} />
                             </div>
 
-
-                            {/* Harvest & Expiry */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label>Harvest Date</Label>
@@ -236,7 +212,6 @@ export default function AddCrop() {
                                 </div>
                             </div>
 
-                            {/* Quality Grade */}
                             <div>
                                 <Label>Quality Grade</Label>
                                 <Select name="qualityGrade" onValueChange={(val) => setFormData({ ...formData, qualityGrade: val })}>
@@ -251,10 +226,10 @@ export default function AddCrop() {
                                 </Select>
                             </div>
 
-                            {/* Submit */}
-                            <Button type="submit" className="w-full">
+                            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">
                                 Add Crop
                             </Button>
+
                         </form>
                     </CardContent>
                 </Card>

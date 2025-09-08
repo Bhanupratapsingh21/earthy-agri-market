@@ -3,6 +3,7 @@ const router = express.Router();
 import Crop from '../models/Crop.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { uploadMultipleImagesToCloudinary, deleteFromCloudinary } from '../middleware/uploadToCloudinary.js';
+import User from '../models/User.js';
 
 // Create a new crop listing
 router.post('/',
@@ -261,6 +262,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+
 router.get('/:id/bids', authMiddleware(), async (req, res) => {
     try {
         const { page = 1, limit = 10, status } = req.query;
@@ -307,23 +309,23 @@ router.get('/:id/bids', authMiddleware(), async (req, res) => {
 // GET /api/crops/farmer/:farmerId - Get all crops by specific farmer
 router.get('/farmer/:farmerId', async (req, res) => {
     try {
-        const { page = 1, limit = 10, status = 'active' } = req.query;
+        const { page = 1, limit = 10, status } = req.query;
         const farmerId = req.params.farmerId;
 
-        const query = { farmer: farmerId };
+        const query = { farmerId };
         if (status) query.status = status;
 
         const crops = await Crop.find(query)
-            .populate('farmerId', 'firstName lastName email')
+            .populate("farmerId", "firstName lastName email")
             .sort({ createdAt: -1 })
-            .limit(limit * 1)
-            .skip((page - 1) * limit);
+            .limit(Number(limit))
+            .skip((Number(page) - 1) * Number(limit));
 
         const total = await Crop.countDocuments(query);
 
-        // Get farmer profile
-        const farmer = await User.findById(farmerId)
-            .select('firstName lastName email location rating totalSales joinedDate bio');
+        const farmer = await User.findById(farmerId).select(
+            "firstName lastName email location rating totalSales joinedDate bio"
+        );
 
         res.json({
             success: true,
@@ -333,14 +335,15 @@ router.get('/farmer/:farmerId', async (req, res) => {
                 pagination: {
                     current: Number(page),
                     pages: Math.ceil(total / limit),
-                    total
-                }
-            }
+                    total,
+                },
+            },
         });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
 router.get('/categories/list', async (req, res) => {
     try {
         const categories = await Crop.aggregate([

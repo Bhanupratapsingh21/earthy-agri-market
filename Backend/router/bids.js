@@ -117,4 +117,36 @@ router.get('/crop/:cropId', auth(), async (req, res) => {
         });
     }
 });
-export default router
+
+
+
+// Get all crops where the logged-in user placed bids
+router.get('/my-bids', auth(), async (req, res) => {
+    try {
+        const buyerId = req.user.id; // authMiddleware sets req.user
+
+        // Fetch all bids by this buyer
+        const bids = await Bid.find({ buyerId })
+            .populate({
+                path: 'cropId',
+                select: 'cropName quantity price images status farmerId harvestDate',
+                populate: { path: 'farmerId', select: 'firstName lastName' } // optional
+            })
+            .sort({ createdAt: -1 });
+
+        const crops = bids.map(bid => ({
+            bidId: bid._id,
+            crop: bid.cropId,
+            bidAmount: bid.bidAmount,
+            status: bid.status,
+            message: bid.message
+        }));
+
+        res.json({ success: true, crops });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+export default router;
+
