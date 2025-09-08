@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use(
     cors({
-        origin: ["http://localhost:8080/",],
+        origin: "*",
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         allowedHeaders: ['Content-Type', 'authorization'],
         credentials: true
