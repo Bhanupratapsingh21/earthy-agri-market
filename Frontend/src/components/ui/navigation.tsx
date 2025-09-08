@@ -20,6 +20,7 @@ export function Navigation({ className }: NavigationProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state: RootState) => state.user);
+  const userRole = useSelector((state: RootState) => state.user.user?.role);
   const refreshToken = localStorage.getItem('refreshToken');
   const handleLogout = async () => {
     try {
@@ -50,7 +51,16 @@ export function Navigation({ className }: NavigationProps) {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Leaf className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-primary">Agrevon</span>
+            <span
+              className="text-2xl font-bold text-primary cursor-pointer"
+              onClick={() => {
+                if (user.role === "farmer") navigate("/farmer-dashboard");
+                else if (user.role === "buyer") navigate("/buyer-dashboard");
+              }}
+            >
+              Agrevon
+            </span>
+
           </div>
 
           {/* Desktop Navigation */}
