@@ -50,7 +50,16 @@ export function Navigation({ className }: NavigationProps) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <Leaf className="h-8 w-8 text-primary" />
+            <img
+              src="https://res.cloudinary.com/djwzwq4cu/image/upload/v1757354785/file_00000000e984623094ee3596d39b764f_atvown.png"
+              alt="Agrevon Logo"
+              className="h-8 w-8 object-contain cursor-pointer"
+              onClick={() => {
+                if (user.role === "farmer") navigate("/farmer-dashboard");
+                else if (user.role === "buyer") navigate("/buyer-dashboard");
+              }}
+            />
+
             <span
               className="text-2xl font-bold text-primary cursor-pointer"
               onClick={() => {
@@ -60,7 +69,6 @@ export function Navigation({ className }: NavigationProps) {
             >
               Agrevon
             </span>
-
           </div>
 
           {/* Desktop Navigation */}
