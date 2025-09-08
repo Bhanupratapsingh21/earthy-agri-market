@@ -4,10 +4,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { useEffect } from "react";
 
 export default function FarmerDashboard() {
 
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user.user);
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated])
 
   // Mock data for dashboard
   const stats = [
@@ -83,7 +94,7 @@ export default function FarmerDashboard() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Farmer Dashboard</h1>
-            <p className="text-muted-foreground mt-1">Welcome back, John! Here's your farm overview.</p>
+            <p className="text-muted-foreground mt-1">Welcome back, {user.firstName}! Here's your farm overview.</p>
           </div>
           <Button className="btn-hero mt-4 sm:mt-0"
             onClick={() => navigate("/add/crops")}>
