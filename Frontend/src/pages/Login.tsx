@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Leaf, LogIn } from "lucide-react";
+import { Eye, EyeOff, Leaf, Loader2, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,10 +9,13 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/UserSlice";
 import { RootState } from "@/store";
+import { toast } from "sonner";
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -31,6 +34,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await axios.post(`${API_BASE_URL}/auth/login`, formData);
@@ -48,7 +52,14 @@ export default function Login() {
 
     } catch (err: any) {
       console.error("Login failed:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Login failed!");
+      toast.error(err.response?.data?.message || "Something went wrong. Please try again.", {
+        description: "Login failed!",
+      });
+
+
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -57,9 +68,14 @@ export default function Login() {
       <Card className="w-full max-w-md shadow-elegant">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Leaf className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-primary">Agrevon</span>
+            <img
+              src="https://res.cloudinary.com/djwzwq4cu/image/upload/v1757354785/file_00000000e984623094ee3596d39b764f_atvown.png"
+              alt="Agrevon Logo"
+              className="h-36 w-36 cursor-pointer"
+              onClick={() => navigate('/')}
+            />
           </div>
+
           <CardTitle className="text-2xl">Welcome Back</CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
@@ -114,10 +130,20 @@ export default function Login() {
               </Link>
             </div>
 
-            <Button type="submit" className="w-full btn-hero">
-              <LogIn className="h-4 w-4 mr-2" />
-              Sign In
+            <Button type="submit" className="w-full btn-hero" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Signing In...
+                </>
+              ) : (
+                <>
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </>
+              )}
             </Button>
+
           </form>
 
           <div className="mt-6 text-center">

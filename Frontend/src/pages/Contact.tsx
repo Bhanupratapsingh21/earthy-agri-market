@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -24,7 +25,8 @@ export default function Contact() {
     e.preventDefault();
     // Static form - no backend functionality
     console.log("Contact form submitted:", formData);
-    alert("Thank you for your message! We'll get back to you soon.");
+    toast.success("Thank you for your message! We'll get back to you soon.")
+
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -34,7 +36,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -50,7 +52,7 @@ export default function Contact() {
             <Card className="shadow-soft">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold text-foreground mb-6">Get in Touch</h3>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
                     <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">

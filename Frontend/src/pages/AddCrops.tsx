@@ -12,7 +12,9 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Navigation } from "@/components/ui/navigation";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,6 +23,8 @@ export default function AddCrop() {
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const token = useSelector((state: RootState) => state.user.accessToken);
     const [images, setImages] = useState<File[]>([]);
+    const [loading, setLoading] = useState(false);
+
 
     const [formData, setFormData] = useState({
         cropName: "",
@@ -55,7 +59,7 @@ export default function AddCrop() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setLoading(true);
         const requiredFields = [
             { field: "cropName", value: formData.cropName },
             { field: "category", value: formData.category },
@@ -70,7 +74,10 @@ export default function AddCrop() {
 
         const errors = requiredFields.filter(f => !f.value).map(f => f.field);
         if (errors.length > 0) {
-            alert(`Please fill all required fields: ${errors.join(", ")}`);
+            toast.error(
+                `Please fill all required fields: ${errors.join(", ")}`
+            );
+
             return;
         }
 
@@ -91,11 +98,18 @@ export default function AddCrop() {
                 headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
             });
 
-            alert("Crop added successfully!");
+
+            toast.success("Crop added successfully!");
+
             navigate("/farmer-dashboard");
         } catch (error: any) {
             console.error(error);
-            alert("Error adding crop: " + (error.response?.data?.message || error.message));
+            toast.error(
+                `Error adding crop: ${error.response?.data?.message || error.message}`
+            );
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -226,8 +240,19 @@ export default function AddCrop() {
                                 </Select>
                             </div>
 
-                            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">
-                                Add Crop
+                            <Button
+                                type="submit"
+                                className="w-full bg-green-600 hover:bg-green-700 text-white"
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Adding...
+                                    </>
+                                ) : (
+                                    "Add Crop"
+                                )}
                             </Button>
 
                         </form>

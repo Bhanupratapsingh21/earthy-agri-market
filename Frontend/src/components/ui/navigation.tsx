@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Leaf, User, LogIn } from "lucide-react";
+import { Menu, X, User, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSelector, useDispatch } from "react-redux";
@@ -48,18 +48,20 @@ export function Navigation({ className }: NavigationProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <Leaf className="h-8 w-8 text-primary" />
-            <span
-              className="text-2xl font-bold text-primary cursor-pointer"
-              onClick={() => {
-                if (user?.role === "farmer") navigate("/farmer-dashboard");
-                else if (user?.role === "buyer") navigate("/buyer-dashboard");
-                else navigate("/");
-              }}
-            >
-              Agrevon
-            </span>
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => {
+              if (user?.role === "farmer") navigate("/farmer-dashboard");
+              else if (user?.role === "buyer") navigate("/buyer-dashboard");
+              else navigate("/");
+            }}
+          >
+            <img
+              src="https://res.cloudinary.com/djwzwq4cu/image/upload/v1757354785/file_00000000e984623094ee3596d39b764f_atvown.png"
+              alt="Agrevon Logo"
+              className="h-12 w-auto object-contain"
+            />
+            <span className="text-xl font-bold text-primary">Agrevon</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -157,7 +159,7 @@ export function Navigation({ className }: NavigationProps) {
                 {isAuthenticated ? (
                   <>
                     <span className="px-2 font-medium text-foreground">
-                      👋 {user?.firstName || "User"}
+                      {user?.firstName || "User"}
                     </span>
                     <Button
                       variant="outline"

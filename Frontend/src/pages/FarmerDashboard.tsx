@@ -8,16 +8,20 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function FarmerDashboard() {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
+  console.log(user);
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [recentProducts, setRecentProducts] = useState<any[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+
+
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -51,7 +55,7 @@ export default function FarmerDashboard() {
 
   const fetchFarmerCrops = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/crops/farmer/${user.id}?page=1&limit=10`);
+      const res = await axios.get(`${API_BASE_URL}/crops/farmer/${user._id}?page=1&limit=10`);
       if (res.data) {
         setRecentProducts(res.data.data.crops);
       }
@@ -85,10 +89,15 @@ export default function FarmerDashboard() {
 
       setRecentProducts(prev => prev.filter(crop => crop._id !== cropId));
 
-      alert("Crop deleted successfully!");
+      toast.success("Crop deleted successfully!");
+
+
     } catch (error: any) {
       console.error("Error deleting crop:", error);
-      alert("Failed to delete crop: " + (error.response?.data?.message || error.message));
+      toast.error(
+        `Failed to delete crop: ${error.response?.data?.message || error.message}`
+      );
+
     }
   };
 
