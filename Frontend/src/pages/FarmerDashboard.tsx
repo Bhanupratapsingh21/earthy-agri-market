@@ -54,7 +54,7 @@ export default function FarmerDashboard() {
 
   const fetchFarmerCrops = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/crops/farmer/${user._id}?page=1&limit=10`);
+      const res = await axios.get(`${API_BASE_URL}/crops/farmer/${user.id}?page=1&limit=10`);
       if (res.data) {
         setRecentProducts(res.data.data.crops);
       }

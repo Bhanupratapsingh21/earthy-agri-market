@@ -119,55 +119,76 @@ export const login = async (req, res) => {
         return resError(res, err, "Login failed!", 500);
     }
 };
-
-// 3. Refresh token handler
 export const refreshTokenHandler = async (req, res) => {
     try {
         const { refreshToken } = req.body;
-        if (!refreshToken) return resError(res, null, "Refresh token required", 400);
+        if (!refreshToken) {
+            return resError(res, null, "Refresh token required", 400);
+        }
 
+        // 🔑 Verify refresh token
         let payload;
         try {
             payload = verifyRefreshToken(refreshToken);
         } catch (err) {
-            return resError(res, err, "Invalid refresh token", 401);
+            return resError(res, err, "Invalid or expired refresh token", 401);
         }
 
+        // 🔎 Find user
         const user = await User.findById(payload.userId);
-        if (!user || !user.refreshTokens.includes(refreshToken)) {
-            return resError(res, null, "User not found or token invalid", 404);
+        if (!user) {
+            return resError(res, null, "User not found", 404);
         }
 
-        if (user.activeRefreshToken !== refreshToken) {
-            return resError(res, null, "Session expired. Please login again.", 401);
+        // 🔎 Check if token exists for this user
+        if (!user.refreshTokens.includes(refreshToken)) {
+            return resError(res, null, "Refresh token not recognized. Please login again.", 401);
         }
 
+        // 🎫 Generate new tokens
         const newAccessToken = signAccessToken({
             userId: user._id.toString(),
             email: user.email,
         });
+
         const newRefreshToken = signRefreshToken({
             userId: user._id.toString(),
             email: user.email,
         });
 
-        user.refreshTokens = [newRefreshToken];
+        // ♻️ Replace old refresh token with new one (to prevent reuse)
+        user.refreshTokens = user.refreshTokens.filter(t => t !== refreshToken);
+        user.refreshTokens.push(newRefreshToken);
+
+        // ✅ Also update activeRefreshToken properly
         user.activeRefreshToken = newRefreshToken;
+
+        // 🔒 (Optional) limit stored refresh tokens to last 5 devices
+        if (user.refreshTokens.length > 5) {
+            user.refreshTokens = user.refreshTokens.slice(-5);
+        }
+
         await user.save();
 
-
+        // 🧹 Clean sensitive data
         const userObj = user.toObject();
         delete userObj.password;
-        delete userObj.refreshTokens;
-        console.log("token refreshed")
+        delete userObj.refreshTokens; // keep activeRefreshToken only
+
+        console.log(`✅ Token refreshed for user: ${user._id}`);
+
         return resSuccess(
             res,
-            { user: userObj, accessToken: newAccessToken, refreshToken: newRefreshToken },
+            {
+                user: userObj, // 👈 now includes updated activeRefreshToken
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+            },
             "Token refreshed successfully",
             200
         );
     } catch (err) {
-        console.error(err);
+        console.error("❌ Error refreshing token:", err);
         return resError(res, err, "Error refreshing token", 500);
     }
 };

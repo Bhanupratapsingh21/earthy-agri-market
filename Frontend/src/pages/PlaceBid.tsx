@@ -26,10 +26,16 @@ export function BidSection({ cropId }: { cropId: string }) {
         }
     }, [isAuthenticated]);
 
+
     const placeBid = async () => {
         try {
             setLoading(true);
             // const token = localStorage.getItem("refreshtoken");
+            if (!isAuthenticated) {
+                alert("user is not authenticated! Please login again");
+                return
+            }
+
             const res = await axios.post(
                 `${import.meta.env.VITE_API_BASE_URL}/bids/place`,
                 { cropId, bidAmount: Number(bidAmount), message },

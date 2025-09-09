@@ -283,12 +283,7 @@ export default function ContactFarmer() {
 
                                         {/* Future Bidding Section */}
                                         <div className="mt-6 pt-4 border-t border-amber-200">
-                                            <div className="text-center mb-4">
-                                                <p className="text-amber-700 text-sm">Interested in this crop?</p>
-                                                <h4 className="font-semibold text-amber-900">Place your bid now!</h4>
-                                            </div>
                                             <BidSection cropId={id} />
-
                                         </div>
                                     </CardContent>
                                 </Card>

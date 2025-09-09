@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Menu, X, Leaf, User, LogIn } from "lucide-react";
+import { Menu, X, User, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/store"; // adjust path based on your store setup
+import { RootState } from "@/store";
 import { logout } from "@/store/UserSlice";
 import { User as UserIcon } from "lucide-react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 interface NavigationProps {
   className?: string;
@@ -15,30 +15,29 @@ interface NavigationProps {
 
 export function Navigation({ className }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state: RootState) => state.user);
-  const userRole = useSelector((state: RootState) => state.user.user?.role);
-  const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = localStorage.getItem("refreshToken");
+
   const handleLogout = async () => {
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}Auth/logout`, {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/logout`, {
         refreshToken,
       });
-      localStorage.removeItem('refreshToken');
-      navigate('/login');
-    }
-    catch (error) {
+      localStorage.removeItem("refreshToken");
+      navigate("/login");
+    } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('Logout failed:', {
+        console.error("Logout failed:", {
           status: error.response?.status,
           data: error.response?.data,
           message: error.message,
         });
       } else {
-        console.error('Unexpected error during logout:', error);
+        console.error("Unexpected error during logout:", error);
       }
     }
     dispatch(logout());
@@ -49,37 +48,39 @@ export function Navigation({ className }: NavigationProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => {
+              if (user?.role === "farmer") navigate("/farmer-dashboard");
+              else if (user?.role === "buyer") navigate("/buyer-dashboard");
+              else navigate("/");
+            }}
+          >
             <img
               src="https://res.cloudinary.com/djwzwq4cu/image/upload/v1757354785/file_00000000e984623094ee3596d39b764f_atvown.png"
               alt="Agrevon Logo"
-              className="h-22 w-28 pt-3 object-contain cursor-pointer"
-              onClick={() => {
-                if (user.role === "farmer") navigate("/farmer-dashboard");
-                else if (user.role === "buyer") navigate("/buyer-dashboard");
-              }}
+              className="h-12 w-auto object-contain"
             />
-
-
+            <span className="text-xl font-bold text-primary">Agrevon</span>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="/marketplace" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/marketplace" className="text-foreground hover:text-primary transition-colors">
               Marketplace
-            </a>
-            <a href="/about" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/about" className="text-foreground hover:text-primary transition-colors">
               About
-            </a>
-            <a href="/services" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/services" className="text-foreground hover:text-primary transition-colors">
               Services
-            </a>
-            <a href="/support" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/support" className="text-foreground hover:text-primary transition-colors">
               Support
-            </a>
-            <a href="/contact" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
               Contact
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Auth Section */}
@@ -101,7 +102,7 @@ export function Navigation({ className }: NavigationProps) {
               </>
             ) : (
               <>
-                <a href="/login">
+                <Link to="/login">
                   <Button
                     variant="outline"
                     size="sm"
@@ -110,13 +111,13 @@ export function Navigation({ className }: NavigationProps) {
                     <LogIn className="h-4 w-4 mr-2" />
                     Login
                   </Button>
-                </a>
-                <a href="/signup">
+                </Link>
+                <Link to="/signup">
                   <Button size="sm" className="btn-hero">
                     <User className="h-4 w-4 mr-2" />
                     Sign Up
                   </Button>
-                </a>
+                </Link>
               </>
             )}
           </div>
@@ -138,27 +139,27 @@ export function Navigation({ className }: NavigationProps) {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-border">
             <div className="flex flex-col space-y-3">
-              <a href="/marketplace" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              <Link to="/marketplace" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Marketplace
-              </a>
-              <a href="/about" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              </Link>
+              <Link to="/about" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 About
-              </a>
-              <a href="/services" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              </Link>
+              <Link to="/services" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Services
-              </a>
-              <a href="/support" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              </Link>
+              <Link to="/support" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Support
-              </a>
-              <a href="/contact" className="text-foreground hover:text-primary transition-colors px-2 py-1">
+              </Link>
+              <Link to="/contact" className="text-foreground hover:text-primary transition-colors px-2 py-1">
                 Contact
-              </a>
+              </Link>
 
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
                 {isAuthenticated ? (
                   <>
                     <span className="px-2 font-medium text-foreground">
-                      👋 {user?.firstName || "User"}
+                      {user?.firstName || "User"}
                     </span>
                     <Button
                       variant="outline"
@@ -171,7 +172,7 @@ export function Navigation({ className }: NavigationProps) {
                   </>
                 ) : (
                   <>
-                    <a href="/login">
+                    <Link to="/login">
                       <Button
                         variant="outline"
                         size="sm"
@@ -180,13 +181,13 @@ export function Navigation({ className }: NavigationProps) {
                         <LogIn className="h-4 w-4 mr-2" />
                         Login
                       </Button>
-                    </a>
-                    <a href="/signup">
+                    </Link>
+                    <Link to="/signup">
                       <Button size="sm" className="w-full btn-hero">
                         <User className="h-4 w-4 mr-2" />
                         Sign Up
                       </Button>
-                    </a>
+                    </Link>
                   </>
                 )}
               </div>
