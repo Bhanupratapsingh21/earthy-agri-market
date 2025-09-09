@@ -53,22 +53,14 @@ export function Navigation({ className }: NavigationProps) {
             <img
               src="https://res.cloudinary.com/djwzwq4cu/image/upload/v1757354785/file_00000000e984623094ee3596d39b764f_atvown.png"
               alt="Agrevon Logo"
-              className="h-8 w-8 object-contain cursor-pointer"
+              className="h-22 w-28 pt-3 object-contain cursor-pointer"
               onClick={() => {
                 if (user.role === "farmer") navigate("/farmer-dashboard");
                 else if (user.role === "buyer") navigate("/buyer-dashboard");
               }}
             />
 
-            <span
-              className="text-2xl font-bold text-primary cursor-pointer"
-              onClick={() => {
-                if (user.role === "farmer") navigate("/farmer-dashboard");
-                else if (user.role === "buyer") navigate("/buyer-dashboard");
-              }}
-            >
-              Agrevon
-            </span>
+
           </div>
 
           {/* Desktop Navigation */}

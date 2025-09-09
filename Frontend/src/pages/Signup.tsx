@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Leaf, User, UserCheck } from "lucide-react";
+import { Eye, EyeOff, Leaf, Loader2, User, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/store/UserSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -26,13 +28,15 @@ export default function Signup() {
     gender: "male",
   });
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setLoading(true);
     if (formData.password != formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Your password and confirm password do not match.")
       return;
     }
 
@@ -49,19 +53,27 @@ export default function Signup() {
       }
     }
     catch (err) {
-      console.error('Signup failed:', err.response?.data || err.message);
+      toast.error('Signup failed:', err.response?.data || err.message);
     }
-    console.log("Signup attempt:", formData);
+    finally {
+      setLoading(false);
+    }
+    //console.log("Signup attempt:", formData);
   };
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-elegant">
         <CardHeader className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Leaf className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-primary">Agrevon</span>
+          <div className="flex items-center justify-center  ">
+            <img
+              src="https://res.cloudinary.com/djwzwq4cu/image/upload/v1757354785/file_00000000e984623094ee3596d39b764f_atvown.png"
+              alt="Agrevon Logo"
+              className="h-32 w-32 cursor-pointer"
+              onClick={() => navigate('/')}
+            />
           </div>
+
           <CardTitle className="text-2xl">Create Account</CardTitle>
           <CardDescription>Join the agricultural marketplace</CardDescription>
         </CardHeader>
@@ -113,10 +125,20 @@ export default function Signup() {
                 type="tel"
                 placeholder="1234567890"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Allow only numbers
+                  if (/^\d*$/.test(value)) {
+                    setFormData({ ...formData, phone: value });
+                  }
+                }}
                 required
+                minLength={10}
+                maxLength={10}
+                pattern="\d{10}"
                 className="border rounded-lg p-3 hover:border-primary focus:border-primary"
               />
+
             </div>
 
             {/* Role Selection */}
@@ -203,8 +225,17 @@ export default function Signup() {
               />
             </div>
 
-            <Button type="submit" className="w-full btn-hero">
-              Create Account
+            <Button type="submit" className="w-full btn-hero" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                <>
+                  Create Account
+                </>
+              )}
             </Button>
           </form>
 

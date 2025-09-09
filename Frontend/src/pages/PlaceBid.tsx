@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 
 
 export function BidSection({ cropId }: { cropId: string }) {
@@ -15,9 +17,11 @@ export function BidSection({ cropId }: { cropId: string }) {
     const token = useSelector((state: RootState) => state.user.accessToken);
     const navigate = useNavigate();
 
+
     useEffect(() => {
         if (!isAuthenticated) {
-            alert("user is not authenticated! Please login again");
+            toast.error("user is not authenticated!Please login again")
+
             navigate('/login');
         }
     }, [isAuthenticated]);
@@ -31,10 +35,14 @@ export function BidSection({ cropId }: { cropId: string }) {
                 { cropId, bidAmount: Number(bidAmount), message },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            alert("✅ Bid placed successfully!");
+
+            toast.success("✅ Bid placed successfully!");
+
             console.log(res.data);
         } catch (error: any) {
-            alert(error.response?.data?.message || "❌ Error placing bid");
+
+            toast.error("❌ Error placing bid! ")
+
         } finally {
             setLoading(false);
         }

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -18,6 +19,8 @@ export default function FarmerDashboard() {
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const [recentProducts, setRecentProducts] = useState<any[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+
+
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -85,10 +88,15 @@ export default function FarmerDashboard() {
 
       setRecentProducts(prev => prev.filter(crop => crop._id !== cropId));
 
-      alert("Crop deleted successfully!");
+      toast.error("Crop deleted successfully!");
+
+
     } catch (error: any) {
       console.error("Error deleting crop:", error);
-      alert("Failed to delete crop: " + (error.response?.data?.message || error.message));
+      toast.error(
+        `Failed to delete crop: ${error.response?.data?.message || error.message}`
+      );
+
     }
   };
 

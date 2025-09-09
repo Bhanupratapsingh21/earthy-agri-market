@@ -155,6 +155,7 @@ export const refreshTokenHandler = async (req, res) => {
         user.activeRefreshToken = newRefreshToken;
         await user.save();
 
+
         const userObj = user.toObject();
         delete userObj.password;
         delete userObj.refreshTokens;
