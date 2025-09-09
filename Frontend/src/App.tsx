@@ -15,7 +15,7 @@ import Services from "./pages/Services";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import NotFound from "./pages/NotFound";
-import { SessionProvider } from "./store/store";
+import { SessionProvider } from "./store/SessionProvider";
 import ComingSoon from "./pages/ComingSoon";
 // Service pages
 import CommodityTrade from "./pages/services/CommodityTrade";

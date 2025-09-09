@@ -1,14 +1,14 @@
-// SessionProvider.tsx
+// src/session/SessionProvider.tsx
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setUser, logout } from "./UserSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { setUser, logout } from "@/store/UserSlice";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const SessionProvider = ({ children }) => {
-    const dispatch = useDispatch();
+export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
@@ -17,11 +17,8 @@ export const SessionProvider = ({ children }) => {
             const response = await axios.post(
                 `${API_BASE_URL}/auth/refresh`,
                 { refreshToken: token },
-                { withCredentials: true }
             );
-
             const { user, accessToken, refreshToken } = response.data.data;
-
             localStorage.setItem("refreshToken", refreshToken);
             dispatch(setUser({ user, accessToken }));
         } catch (err) {

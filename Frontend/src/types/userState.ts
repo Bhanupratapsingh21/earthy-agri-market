@@ -1,16 +1,13 @@
-// src/types/userstate.ts
-
+// Define the User model
 export interface User {
-    _id: string;
+    id: string;
     firstName: string;
-    lastName: string;
+    lastName?: string;
     email: string;
-    phone: string;
-    gender: string;
-    role: string;
-    profileImage?: string | null;
+    role: "farmer" | "buyer" | "admin"; // extend as needed
 }
 
+// Define the UserSlice state
 export interface UserState {
     user: User | null;
     accessToken: string | null;

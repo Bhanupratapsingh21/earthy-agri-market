@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, UserState } from '@/types/userState';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User, UserState } from "@/types/userState";
 
 const initialState: UserState = {
     user: null,
@@ -8,10 +8,13 @@ const initialState: UserState = {
 };
 
 const userSlice = createSlice({
-    name: 'user',
+    name: "user",
     initialState,
     reducers: {
-        setUser: (state, action: PayloadAction<{ user: User; accessToken: string }>) => {
+        setUser: (
+            state,
+            action: PayloadAction<{ user: User; accessToken: string }>
+        ) => {
             state.user = action.payload.user;
             state.accessToken = action.payload.accessToken;
             state.isAuthenticated = true;
@@ -20,7 +23,7 @@ const userSlice = createSlice({
             state.user = null;
             state.accessToken = null;
             state.isAuthenticated = false;
-            localStorage.removeItem('refreshToken');
+            localStorage.removeItem("refreshToken");
         },
     },
 });
