@@ -33,6 +33,9 @@ app.use((req, res, next) => {
 // Using ES6 import - assuming crops.js and bids.js exist in ./router folder and are default exports
 import cropsRouter from './router/crops.js';
 import bidsRouter from './router/bids.js';
+import chatRoutes from './router/chat.js';
+// Register routes
+app.use("/api/chat", chatRoutes);
 app.use('/api/crops', cropsRouter);
 app.use('/api/bids', bidsRouter);
 

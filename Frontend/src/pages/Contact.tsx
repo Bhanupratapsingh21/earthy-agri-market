@@ -44,9 +44,9 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8">
           {/* Contact Information */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="space-y-6">
             <Card className="shadow-soft">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold text-foreground mb-6">Get in Touch</h3>
@@ -126,125 +126,7 @@ export default function Contact() {
               </CardContent>
             </Card>
           </div>
-
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <Card className="shadow-soft">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold text-foreground mb-6">Send us a Message</h3>
-                
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input
-                        id="firstName"
-                        placeholder="John"
-                        value={formData.firstName}
-                        onChange={(e) => handleInputChange("firstName", e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input
-                        id="lastName"
-                        placeholder="Doe"
-                        value={formData.lastName}
-                        onChange={(e) => handleInputChange("lastName", e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="john@example.com"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone (Optional)</Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        placeholder="+1 (555) 123-4567"
-                        value={formData.phone}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="category">Category</Label>
-                      <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="general">General Inquiry</SelectItem>
-                          <SelectItem value="farmer">Farmer Support</SelectItem>
-                          <SelectItem value="buyer">Buyer Support</SelectItem>
-                          <SelectItem value="technical">Technical Issue</SelectItem>
-                          <SelectItem value="billing">Billing Question</SelectItem>
-                          <SelectItem value="partnership">Partnership</SelectItem>
-                          <SelectItem value="media">Media Inquiry</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="subject">Subject</Label>
-                      <Input
-                        id="subject"
-                        placeholder="How can we help you?"
-                        value={formData.subject}
-                        onChange={(e) => handleInputChange("subject", e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea
-                      id="message"
-                      placeholder="Please describe your inquiry in detail..."
-                      rows={6}
-                      value={formData.message}
-                      onChange={(e) => handleInputChange("message", e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <Button type="submit" className="w-full btn-hero">
-                    <Send className="h-4 w-4 mr-2" />
-                    Send Message
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
         </div>
-
-        {/* Map or Additional Info */}
-        <Card className="mt-12 shadow-soft">
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold text-foreground mb-4">Visit Our Office</h3>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Our team is located in the heart of California's agricultural region. Feel free to visit us during business hours or schedule an appointment.
-            </p>
-            <div className="h-64 bg-gradient-card rounded-lg flex items-center justify-center">
-              <p className="text-muted-foreground">Interactive Map Coming Soon</p>
-            </div>
-          </CardContent>
-        </Card>
       </main>
 
       <Footer />

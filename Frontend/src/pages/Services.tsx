@@ -1,21 +1,22 @@
 import { Navigation } from "@/components/ui/navigation";
 import { Footer } from "@/components/ui/footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  ShoppingCart, 
-  Bot, 
-  QrCode, 
-  Calculator, 
-  FileCheck, 
-  Warehouse, 
-  Truck, 
-  Sprout, 
-  Wrench, 
-  TrendingUp, 
-  Newspaper, 
-  CreditCard, 
-  HeadphonesIcon 
+import {
+  ShoppingCart,
+  Bot,
+  QrCode,
+  Calculator,
+  FileCheck,
+  Warehouse,
+  Truck,
+  Sprout,
+  Wrench,
+  TrendingUp,
+  Newspaper,
+  CreditCard,
+  HeadphonesIcon
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const services = [
   {
@@ -89,7 +90,7 @@ export default function Services() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="container mx-auto px-4 py-16">
         {/* Header Section */}
         <div className="text-center mb-16">
@@ -97,7 +98,7 @@ export default function Services() {
             Our <span className="text-primary">Services</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Comprehensive agricultural solutions designed to empower farmers and buyers 
+            Comprehensive agricultural solutions designed to empower farmers and buyers
             with modern technology, fair trade practices, and expert support.
           </p>
         </div>
@@ -110,9 +111,9 @@ export default function Services() {
               .replace(/&/g, '')
               .replace(/\s+/g, '-')
               .replace(/[()]/g, '');
-            
+
             return (
-              <a href={`/services/${serviceSlug}`} key={index}>
+              <Link to={`/services/${serviceSlug}`} key={index}>
                 <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 border-border bg-card cursor-pointer">
                   <CardHeader className="text-center pb-4">
                     <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit group-hover:bg-primary/20 transition-colors">
@@ -128,7 +129,7 @@ export default function Services() {
                     </CardDescription>
                   </CardContent>
                 </Card>
-              </a>
+              </Link>
             );
           })}
         </div>
@@ -140,18 +141,18 @@ export default function Services() {
               Ready to Transform Your Agricultural Journey?
             </h2>
             <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-              Join thousands of farmers and buyers who trust Agrevon for their agricultural needs. 
+              Join thousands of farmers and buyers who trust Agrevon for their agricultural needs.
               Start exploring our services today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
+              <a
+                href="/signup"
                 className="inline-flex items-center justify-center px-8 py-3 rounded-md bg-white text-primary font-medium hover:bg-white/90 transition-colors"
               >
                 Get Started Today
               </a>
-              <a 
-                href="/contact" 
+              <a
+                href="/contact"
                 className="inline-flex items-center justify-center px-8 py-3 rounded-md border-2 border-white text-white font-medium hover:bg-white/10 transition-colors"
               >
                 Contact Us

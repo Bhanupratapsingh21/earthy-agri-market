@@ -53,7 +53,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -65,7 +65,7 @@ export default function About() {
             Connecting Farmers and Buyers for Fair Agriculture
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            We're on a mission to revolutionize agriculture by creating direct connections between farmers and buyers, 
+            We're on a mission to revolutionize agriculture by creating direct connections between farmers and buyers,
             ensuring fair prices, quality produce, and sustainable farming practices.
           </p>
         </div>
@@ -76,19 +76,19 @@ export default function About() {
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold text-foreground mb-4">Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
-                To empower farmers by providing them with a direct platform to sell their produce at fair prices, 
-                while connecting buyers with fresh, quality agricultural products. We believe in transparency, 
+                To empower farmers by providing them with a direct platform to sell their produce at fair prices,
+                while connecting buyers with fresh, quality agricultural products. We believe in transparency,
                 sustainability, and building stronger agricultural communities.
               </p>
             </CardContent>
           </Card>
-          
+
           <Card className="shadow-soft">
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold text-foreground mb-4">Our Vision</h2>
               <p className="text-muted-foreground leading-relaxed">
-                A world where every farmer has access to fair markets, every buyer can source quality produce 
-                directly from farmers, and sustainable agriculture practices are the norm. We envision a transparent, 
+                A world where every farmer has access to fair markets, every buyer can source quality produce
+                directly from farmers, and sustainable agriculture practices are the norm. We envision a transparent,
                 efficient, and equitable agricultural marketplace.
               </p>
             </CardContent>
@@ -120,19 +120,19 @@ export default function About() {
               <h2 className="text-3xl font-bold text-foreground mb-6">Our Story</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Agrevon was born from a simple observation: farmers work incredibly hard to grow quality produce, 
-                  yet often struggle to get fair prices for their crops. Meanwhile, buyers want fresh, quality 
+                  Agrevon was born from a simple observation: farmers work incredibly hard to grow quality produce,
+                  yet often struggle to get fair prices for their crops. Meanwhile, buyers want fresh, quality
                   products but lack direct access to the source.
                 </p>
                 <p>
-                  Founded in 2024 by a team of agricultural experts and technology enthusiasts, Agrevon bridges 
-                  this gap by creating a transparent marketplace where farmers can showcase their produce and 
+                  Founded in 2024 by a team of agricultural experts and technology enthusiasts, Agrevon bridges
+                  this gap by creating a transparent marketplace where farmers can showcase their produce and
                   connect directly with buyers.
                 </p>
                 <p>
-                  Today, we're proud to serve thousands of farmers and buyers across the country, facilitating 
-                  fair trade and promoting sustainable agriculture practices. Our platform has helped farmers 
-                  increase their income by an average of 30% while providing buyers with access to the freshest, 
+                  Today, we're proud to serve thousands of farmers and buyers across the country, facilitating
+                  fair trade and promoting sustainable agriculture practices. Our platform has helped farmers
+                  increase their income by an average of 30% while providing buyers with access to the freshest,
                   highest-quality produce.
                 </p>
               </div>
@@ -140,7 +140,15 @@ export default function About() {
           </Card>
         </div>
 
-        {/* Team */}
+
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
+
+/*
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">Meet Our Team</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -159,7 +167,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* Impact Stats */}
         <div className="bg-gradient-card rounded-2xl p-8 text-center">
           <h2 className="text-3xl font-bold text-foreground mb-8">Our Impact</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -181,9 +188,4 @@ export default function About() {
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
-  );
-}
+*/
