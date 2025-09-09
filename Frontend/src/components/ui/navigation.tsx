@@ -59,9 +59,8 @@ export function Navigation({ className }: NavigationProps) {
             <img
               src="https://res.cloudinary.com/djwzwq4cu/image/upload/v1757354785/file_00000000e984623094ee3596d39b764f_atvown.png"
               alt="Agrevon Logo"
-              className="h-12 w-auto object-contain"
+              className="h-24 w-32 object-contain mt-2"
             />
-            <span className="text-xl font-bold text-primary">Agrevon</span>
           </div>
 
           {/* Desktop Navigation */}

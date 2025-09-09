@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -12,11 +11,11 @@ interface StepCardProps {
 
 const StepCard = ({ number, title, description, isActive, onClick }: StepCardProps) => {
   return (
-    <div 
+    <div
       className={cn(
         "rounded-xl p-6 cursor-pointer transition-all duration-500 border",
-        isActive 
-          ? "bg-white shadow-elegant border-pulse-200" 
+        isActive
+          ? "bg-white shadow-elegant border-pulse-200"
           : "bg-white/50 hover:bg-white/80 border-transparent"
       )}
       onClick={onClick}
@@ -77,10 +76,10 @@ const HowItWorks = () => {
     const interval = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % stepsData.length);
     }, 5000);
-    
+
     return () => clearInterval(interval);
   }, [stepsData.length]);
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -93,26 +92,26 @@ const HowItWorks = () => {
       },
       { threshold: 0.1 }
     );
-    
+
     const elements = document.querySelectorAll(".fade-in-stagger");
     elements.forEach((el, index) => {
       (el as HTMLElement).style.animationDelay = `${0.1 * (index + 1)}s`;
       observer.observe(el);
     });
-    
+
     return () => {
       elements.forEach((el) => {
         observer.unobserve(el);
       });
     };
   }, []);
-  
+
   return (
     <section className="py-20 bg-white relative" id="how-it-works" ref={sectionRef}>
       {/* Background decorative elements */}
       <div className="absolute -top-20 right-0 w-72 h-72 bg-pulse-50 rounded-full opacity-60 blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-10 w-64 h-64 bg-gray-50 rounded-full opacity-70 blur-3xl -z-10"></div>
-      
+
       <div className="section-container">
         <div className="text-center mb-16 opacity-0 fade-in-stagger">
           <div className="pulse-chip mx-auto mb-4">
@@ -123,7 +122,7 @@ const HowItWorks = () => {
             A seamless four-step process from request to full integration.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-4 order-2 lg:order-1 opacity-0 fade-in-stagger">
             {stepsData.map((step, index) => (
@@ -137,7 +136,7 @@ const HowItWorks = () => {
               />
             ))}
           </div>
-          
+
           <div className="relative rounded-3xl overflow-hidden h-[400px] shadow-elegant order-1 lg:order-2 opacity-0 fade-in-stagger">
             {stepsData.map((step, index) => (
               <div
